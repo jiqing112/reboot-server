@@ -1,0 +1,14 @@
+[Unit]
+Description=VM Remote Reboot Server
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/user/vibecoding/workspace/reboot_server
+ExecStart=/usr/bin/python3 /home/user/vibecoding/workspace/reboot_server/reboot_server.py --config /home/user/vibecoding/workspace/reboot_server/config.ini
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
