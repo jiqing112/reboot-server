@@ -50,14 +50,23 @@ class RebootHandler(http.server.BaseHTTPRequestHandler):
                 self.logger.warning(f"Invalid token from {self.client_address[0]}")
                 return
             
-            # 记录有效的重启请求
-            self.logger.info(f"Reboot request received from {self.client_address[0]}")
+            # 获取当前时间
+            current_time = time.strftime("%Y-%m-%d %H:%M:%S")
             
-            # 发送确认响应
-            self._send_response("Reboot command received, system will restart shortly")
+            # 记录有效的重启请求
+            self.logger.info(f"Reboot request received from {self.client_address[0]} at {current_time}")
+            
+            # 发送确认响应，包含时间信息
+            self._send_response(f"Reboot command received at {current_time}, system will restart shortly")
             
             # 在后台执行重启命令
             self._execute_reboot()
+        elif parsed_url.path == '/':
+            # 直接访问根路径时返回空响应
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'')
         else:
             self._send_error(404, "Not Found")
     
